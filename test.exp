@@ -1,0 +1,30 @@
+spawn npm run registrar
+set registrar $spawn_id
+expect "registrar> "
+
+spawn npm run voter -- voter_a.json
+set voter_a $spawn_id
+expect "connected"
+expect "waiting for registration to close"
+
+interact -u $registrar
+send "close\r\n"
+expect "registrar> "
+
+interact -u $voter_a
+expect "voter> "
+send "create \"Blue is the best color\"\r\n"
+expect "voter> "
+send "list"
+expect -indices -re "\\[(.+)\\] Blue is the best color\r\n"
+set election_id expect_out(0,string)
+send "vote $election_id Y\r\n"
+expect "voter> "
+
+interact -u $registrar
+send "list"
+expect "[$election_id] Blue is the best color\r\n"
+expect "voter> "
+send "tally $election_id\r\n"
+expect "Yes: 1\nNo:  0\r\n"
+expect "voter> "

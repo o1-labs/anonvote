@@ -1,0 +1,41 @@
+const Status = Object.freeze({
+  Error: false,
+  Ok: true
+})
+
+export class Result {
+  constructor(status, data) {
+    this.status = status
+    this.data = data || null
+  }
+
+  isOk() { return this.status === Status.Ok }
+
+}
+
+export const ok = (data) => new Result(Status.Ok, data)
+export const error = (data) => new Result(Status.Error, data.toString())
+
+// export function fatal_result(msg, result) {
+//   function error(err) {
+//     const extra = msg && msg.length > 0 ? ` while ${msg}` : ''
+//     console.error(`fatal error${extra}: ${err}`)
+//     process.exit(1)
+//   }
+// 
+//   if(!result) {
+//     error('result was null')
+//   }
+//   
+//   if(!(result instanceof Result)) {
+//     if(typeof(result) === 'object' && 'status' in result && 'data' in result) {
+//       result = new Result(result.status, result.data)
+//     } else {
+//       error(`expected Result, got ${result}`)
+//     }
+//   }
+// 
+//   if(!result.is_ok()) {
+//     error(result.data)
+//   }
+// }

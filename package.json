@@ -1,0 +1,29 @@
+{
+  "name": "votie_js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "registrar.js",
+  "author": "Nathan Holland <nholland94@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "js_snarky": "file:../snarky/js_snarky",
+    "rpc-websockets": "^4.6.1",
+    "short-uuid": "^3.1.1",
+    "snarkyjs-crypto": "file:../snarkyjs-crypto"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.6.4",
+    "@babel/core": "^7.6.4",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/preset-env": "^7.6.3"
+  },
+  "scripts": {
+    "build_re": "dune build --display=quiet src/snark.exe",
+    "build_js": "babel src -d lib",
+    "build": "npm run build_re && npm run build_js",
+    "clean": "dune clean && rm -rf lib",
+    "registrar": "npm run build && node lib/registrar.js",
+    "voter": "npm run build && node lib/voter.js",
+    "test": "npm run build && node lib/test.js"
+  }
+}
