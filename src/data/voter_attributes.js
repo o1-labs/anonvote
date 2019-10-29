@@ -23,7 +23,7 @@ export class AttributeMask {
       const [key, value] = parts
       if(parts.length !== 2 || !key || !value)
         throw `invalid attribute constraint "${constraint}"`
-      if(!(key in attributeTags))
+      if(attributeTags.indexOf(key) < 0)
         throw `"${key}" is not a valid voter attribute`
       this.mask[attributeTags.indexOf(key)] = value
     })

@@ -1,4 +1,4 @@
-import Snarky from 'js_snarky'
+import Snarky from 'snarkyjs'
 
 import Election from './data/Election'
 import Vote from './data/Vote'
@@ -24,12 +24,14 @@ joyce.setMembershipProof(voterRegistry.proveMembership(joyce.commitment))
 const election = new Election('test', new AttributeMask([]))
 const vote = new Vote(ada, election, true)
 
+console.log(ada.witness()[1].path)
+
 console.log({
-  statement: vote.statement(election),
+  statement: vote.statement(voterRegistry.merkleTreeRoot(), election),
   witness: ada.witness()
 })
 snarkProcess.prove({
-  statement: vote.statement(election),
+  statement: vote.statement(voterRegistry.merkleTreeRoot(), election),
   witness: ada.witness()
 })
   .then((proof) => console.log(`success -- ${proof}`))

@@ -26,7 +26,7 @@ export default class Election {
   }
 
   printTally() {
-    const [y, n] = election.tally()
+    const [y, n] = this.tally()
     console.log('Yes: ' + y.toString() + '\nNo:  ' + n.toString())
   }
 

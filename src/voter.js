@@ -1,11 +1,12 @@
 import {Client as WebSocketClient} from 'rpc-websockets'
-import Snarky from 'js_snarky'
+import Snarky from 'snarkyjs'
 import {bn128} from 'snarkyjs-crypto'
 
 import {AttributeMask} from './data/voter_attributes'
 import Election from './data/Election'
 import ElectionDB from './data/ElectionDB'
 import NetworkState from './data/NetworkState'
+import SnarkKeys from './data/SnarkKeys'
 import Vote from './data/Vote'
 import Voter from './data/Voter'
 
@@ -62,7 +63,7 @@ function waitForRegistrationToClose() {
   })
 }
 
-function run(electionDb) {
+function run(merkleTreeRoot, electionDb) {
   ws.subscribe('elections')
   ws.on('elections', (electionData) => {
     const election = Election.fromJson(electionData)
@@ -109,12 +110,11 @@ function run(electionDb) {
       const vote = new Vote(voter, election, parseAnswer(answer))
 
       console.log({
-        statement: vote.statement(election),
+        statement: vote.statement(merkleTreeRoot, election),
         witness: voter.witness()
       })
-      console.log(voter.witness()[0][1])
       return snarkProcess.prove({
-        statement: vote.statement(election),
+        statement: vote.statement(merkleTreeRoot, election),
         witness: voter.witness()
       })
         .catch(function(err) {throw `failed to construct vote proof -- ${JSON.stringify([...arguments])}`})
@@ -150,17 +150,30 @@ function acquireMembershipProof(networkState) {
   }
 }
 
+function synchronizeSnarkKeys(targetSnarkKeysHash) {
+  return new Promise((resolve) => {
+    var snarkKeys
+    try {snarkKeys = new SnarkKeys()} catch(err) {snarkKeys = null}
+    if(!snarkKeys || snarkKeys.keysHash !== targetSnarkKeysHash) {
+      getSnarkKeys().then(SnarkKeys.write).then(resolve)
+    } else {
+      resolve()
+    }
+  })
+}
+
 function initialize(initialState) {
-  return acquireMembershipProof(initialState.networkState)
-    .then((membershipProof) => {
-      voter.setMembershipProof(membershipProof)
+  return synchronizeSnarkKeys(initialState.snarkKeysHash)
+    .then(() => acquireMembershipProof(initialState.networkState))
+    .then((response) => {
+      voter.setMembershipProof(response.membershipProof)
       const electionDb = new ElectionDB()
       // TODO: is bind required for es6 classes?
       initialState.elections.forEach((electionData) =>
         electionDb.add(Election.fromJson(electionData)))
       initialState.votes.forEach((voteData) =>
         electionDb.recordVote(Vote.fromJson(voteData)))
-      return run(electionDb)
+      return run(bn128.Field.ofString(response.merkleTreeRoot), electionDb)
     })
 }
 

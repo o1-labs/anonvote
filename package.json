@@ -6,9 +6,10 @@
   "author": "Nathan Holland <nholland94@gmail.com>",
   "license": "ISC",
   "dependencies": {
-    "js_snarky": "file:../snarky/js_snarky",
+    "js-md5": "^0.7.3",
     "rpc-websockets": "^4.6.1",
     "short-uuid": "^3.1.1",
+    "snarkyjs": "file:../snarky/snarkyjs",
     "snarkyjs-crypto": "file:../snarkyjs-crypto"
   },
   "devDependencies": {

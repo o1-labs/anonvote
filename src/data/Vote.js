@@ -12,7 +12,7 @@ export default class Vote {
     this.answer = answer
   }
 
-  statement(election) {
+  statement(merkleTreeRoot, election) {
     if(!(election instanceof Election))
       throw new Error('Vote.statement() expects to receive election')
 
@@ -20,11 +20,12 @@ export default class Vote {
       throw new Error('Vote.statement() received the wrong election')
 
     return [
-      this.voterCommitment.toString(),
-      this.ballot.toString(),
-      hashString(this.answer).toString(),
-      election.attributeMask.mask.map((c) => c ? c.toString() : c),
-      this.electionCommitment.toString()
+      // this.voterCommitment.toString(),
+      merkleTreeRoot,
+      this.ballot,
+      hashString(this.answer),
+      election.attributeMask.mask.map((c) => c ? hashString(c) : bn128.Field.zero),
+      this.electionCommitment
     ]
   }
 
@@ -43,12 +44,12 @@ Vote.fromJson = function(json) {
   const requiredParams = ['voterCommitment', 'electionCommitment', 'ballot', 'answer']
 
   requiredParams.forEach((requiredParam) => {
-    if(!(requiredParam in json) || typeof json[requiredParam] !== 'string')
+    if(!(requiredParam in json))
       throw `Vote.fromJson: missing or invalid parameter "${requiredParam}"`
   })
 
   return {
-    __proto__: Voter.prototype,
+    __proto__: Vote.prototype,
     voterCommitment: bn128.Field.ofString(json.voterCommitment),
     electionCommitment: bn128.Field.ofString(json.electionCommitment),
     ballot: bn128.Field.ofString(json.ballot),

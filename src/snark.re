@@ -106,6 +106,13 @@ let main =
   for (i in 0 to Attribute_set.length - 1) {
     let claimedAttr = maskedAttributes[i];
     let attr = voter.attributes[i];
+    // as_prover(() => {
+    //   let str =
+    //     Printf.sprintf("%s -- %s\n",
+    //       Field.Constant.toString(As_prover.read(Field.typ, claimedAttr)),
+    //       Field.Constant.toString(As_prover.read(Field.typ, attr)));
+    //   failwith(str);
+    // });
     Bool.assertAny([
       Attribute_set.Commitment.equal(claimedAttr, attr),
       Attribute_set.Commitment.equal(claimedAttr, nullAttr),
