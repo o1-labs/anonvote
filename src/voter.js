@@ -16,11 +16,15 @@ if(process.argv.length < 3) {
   console.error('required voter json argument is missing')
   process.exit(1)
 }
+const voterJsonFile = process.argv[2]
+var serverUri = process.argv.length >= 4 ? process.argv[3] : 'localhost:8080'
+if(serverUri.indexOf('ws://') !== 0)
+  serverUri = 'ws://' + serverUri
 
 // TODO: take in positional CLI arg for server address
 const voter = new Voter(process.argv[2])
 const snarkProcess = new Snarky('src/snark.exe')
-const ws = new WebSocketClient('ws://localhost:8080')
+const ws = new WebSocketClient(serverUri)
 
 function parseAnswer(answer) {
   switch(answer) {

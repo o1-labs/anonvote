@@ -10,13 +10,15 @@ import VoterRegistry from './data/VoterRegistry'
 
 import repl from './util/repl'
 
+const port = process.argv.length >= 3 ? process.argv[2] : '8080'
+
 const snarkProcess = new Snarky('src/snark.exe')
 const voterRegistry = new VoterRegistry()
 const electionDb = new ElectionDB()
 var networkState = NetworkState.Registration
 
 function setupServer(snarkKeys) {
-  const ws = new WebSocketServer({port: '8080'})
+  const ws = new WebSocketServer({port})
 
   // -- Event streams
   // state: broadcasts updates to network state
