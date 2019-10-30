@@ -1,3 +1,4 @@
+import chalk from 'chalk'
 import {Client as WebSocketClient} from 'rpc-websockets'
 import Snarky from 'snarkyjs'
 import {bn128} from 'snarkyjs-crypto'
@@ -89,7 +90,7 @@ function run(merkleTreeRoot, electionDb) {
 
   return repl('voter', {
     list() {
-      electionDb.print()
+      electionDb.print(voter)
     },
 
     tally(electionId) {
@@ -99,7 +100,6 @@ function run(merkleTreeRoot, electionDb) {
       election.printTally()
     },
 
-    // TODO: parse required attributes
     create(summary, ...attributeConstraints) {
       const attributeMask = new AttributeMask(attributeConstraints)
       const election = new Election(summary, attributeMask)
@@ -114,6 +114,13 @@ function run(merkleTreeRoot, electionDb) {
       const election = electionDb.get(bn128.Field.ofString(electionCommitment))
       if(!election)
         throw new Error('election not found')
+
+      const canVote = voter.canVote(election)
+      if(!canVote.answer) {
+        const str = canVote.unsatisfiedAttrs.map(({tag, value}) => `${tag}=${value}`).join(' ')
+        console.log(chalk.red(`cannot vote in election, unsatified constraints: str`))
+        return
+      }
 
       const vote = new Vote(voter, election, parseAnswer(answer))
 

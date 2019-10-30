@@ -1,3 +1,5 @@
+import chalk from 'chalk'
+
 import Election from './Election'
 
 export default class ElectionDB {
@@ -27,9 +29,14 @@ export default class ElectionDB {
     this.get(vote.electionCommitment).recordVote(vote)
   }
 
-  print() {
-    console.log(Object.keys(this.#elections)
-      .map((id) => `[${id}] : ${this.get(id).summary}`)
-      .join('\n'))
+  summarizeElection(voter, commitment) {
+    const election = this.get(commitment)
+    const color = voter.canVote(election).answer ? chalk.green : chalk.red
+    return color(`[${commitment}] : ${election.summary} || ${election.attributeMask.summarize()}`)
+  }
+
+  print(voter) {
+    const str = Object.keys(this.#elections).map(this.summarizeElection.bind(this, voter)).join('\n')
+    console.log(str)
   }
 }

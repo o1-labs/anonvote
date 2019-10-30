@@ -6,6 +6,7 @@
   "author": "Nathan Holland <nholland94@gmail.com>",
   "license": "ISC",
   "dependencies": {
+    "chalk": "^2.4.2",
     "js-md5": "^0.7.3",
     "rpc-websockets": "^4.6.1",
     "snarkyjs": "^1.0.2",

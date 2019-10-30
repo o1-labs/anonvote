@@ -34,6 +34,9 @@ export default class Election {
     const {summary, attributeMask} = this
     return {summary, attributeMask: attributeMask.mask}
   }
+
+  canVote(voter) {
+  }
 }
 
 Election.fromJson = function(json) {

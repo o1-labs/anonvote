@@ -33,6 +33,16 @@ export class AttributeMask {
     return this.mask.map((requiredValue, index) =>
       requiredValue ? hashString(requiredValue) : bn128.Field.zero)
   }
+
+  summarize() {
+    return attributeTags.map((tag, i) => {
+      const attrConstraint = this.mask[i]
+      if(!attrConstraint) return ''
+      return `${tag}=${attrConstraint}`
+    })
+      .filter((str) => str.length > 0)
+      .join(' ')
+  }
 }
 
 AttributeMask.ofStringArray = function(arr) {

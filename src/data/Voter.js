@@ -63,4 +63,19 @@ export default class Voter {
       this.membershipProof
     ]
   }
+
+  canVote(election) {
+    const unsatisfiedAttrs = []
+
+    attributeTags.forEach((tag, i) => {
+      const myAttrCommitment = this.attributeCommitments[i]
+      const desiredAttribute = election.attributeMask.mask[i]
+
+      if(desiredAttribute && hashString(desiredAttribute).toString() !== myAttrCommitment.toString())
+        unsatisfiedAttrs.push({tag, value: desiredAttribute})
+    })
+
+    const answer = (unsatisfiedAttrs.length === 0)
+    return {answer, unsatisfiedAttrs}
+  }
 }
