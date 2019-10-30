@@ -88,7 +88,6 @@ function setupServer(snarkKeys) {
 
   // castVote: submit a vote for an ongoing election
   ws.register('castVote', function([voteData, proof]) {
-    console.log('voteData:', voteData)
     const vote = Vote.fromJson(voteData)
 
     const election = electionDb.get(vote.electionCommitment)

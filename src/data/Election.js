@@ -37,8 +37,6 @@ export default class Election {
 }
 
 Election.fromJson = function(json) {
-  console.log(Object.keys(json))
-  console.log(json.attributeMask)
   if(!('summary' in json) || typeof json.summary !== 'string')
     throw new Error('missing or invalid "summary" param')
   if(!('attributeMask' in json) || !(json.attributeMask instanceof Array))

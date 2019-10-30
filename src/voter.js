@@ -113,10 +113,6 @@ function run(merkleTreeRoot, electionDb) {
 
       const vote = new Vote(voter, election, parseAnswer(answer))
 
-      console.log({
-        statement: vote.statement(merkleTreeRoot, election),
-        witness: voter.witness()
-      })
       return snarkProcess.prove({
         statement: vote.statement(merkleTreeRoot, election),
         witness: voter.witness()

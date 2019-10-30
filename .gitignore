@@ -1,8 +1,6 @@
 _build
 node_modules
 lib
+sample_voters
 *.pk
 *.vk
-ada.json
-bob.json
-joyce.json

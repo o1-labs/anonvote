@@ -12,7 +12,6 @@ export default class ElectionDB {
       throw new Error('can only add instances of Election to an ElectionDB')
     if(this.exists(election.commitment))
       throw new Error('election with same id already registered')
-    console.log(election.commitment.toString())
     this.#elections[election.commitment.toString()] = election
   }
 
