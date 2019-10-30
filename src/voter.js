@@ -57,6 +57,10 @@ function castVote(vote, voteSnark) {
   return ws.call('castVote', [vote, voteSnark])
 }
 
+function getSnarkKeys() {
+  return ws.call('getKeys')
+}
+
 function waitForRegistrationToClose() {
   ws.subscribe('networkState')
   return new Promise((resolve, reject) => {

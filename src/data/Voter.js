@@ -26,7 +26,8 @@ export default class Voter {
       hashString(attr))
 
     if('privateKey' in config) {
-      this.privateKey = bn128.Schnorr.PrivateKey.ofString(config.privateKey)
+      // this.privateKey = bn128.Schnorr.PrivateKey.ofString(config.privateKey)
+      this.privateKey = bn128.Field.ofString(config.privateKey)
     } else {
       // this.privateKey = bn128.Schnorr.PrivateKey.ofString(bn128.Field.zero.toString())
       this.privateKey = bn128.Schnorr.PrivateKey.create()

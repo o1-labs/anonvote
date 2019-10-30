@@ -8,9 +8,8 @@
   "dependencies": {
     "js-md5": "^0.7.3",
     "rpc-websockets": "^4.6.1",
-    "short-uuid": "^3.1.1",
-    "snarkyjs": "file:../snarky/snarkyjs",
-    "snarkyjs-crypto": "file:../snarkyjs-crypto"
+    "snarkyjs": "^1.0.2",
+    "snarkyjs-crypto": "^0.1.9"
   },
   "devDependencies": {
     "@babel/cli": "^7.6.4",
