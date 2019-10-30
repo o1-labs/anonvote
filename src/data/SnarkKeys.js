@@ -10,6 +10,6 @@ export default class SnarkKeys {
 }
 
 SnarkKeys.write = function({provingKey, verificationKey}) {
-  fs.writeFileSync('proving_key.pk', provingKey)
-  fs.writeFileSync('verification_key.vk', verificationKey)
+  fs.writeFileSync('proving_key.pk', Buffer.from(provingKey))
+  fs.writeFileSync('verification_key.vk', Buffer.from(verificationKey))
 }

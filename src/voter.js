@@ -83,6 +83,7 @@ function run(merkleTreeRoot, electionDb) {
   ws.subscribe('votes')
   ws.on('votes', (voteData) => {
     const vote = Vote.fromJson(voteData)
+    // TODO: check vote -- the registrar already did, but we should too
     // if(vote.voterCommitment !== voter.commitment)
     //   electionDb.recordVote(Vote.fromJson(vote))
     electionDb.recordVote(Vote.fromJson(vote))
