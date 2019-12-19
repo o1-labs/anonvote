@@ -102,11 +102,11 @@ function setupServer(snarkKeys) {
       statement: vote.statement(voterRegistry.merkleTreeRoot(), election),
       proof
     })
-      .catch((err) => {throw `failed to verify snark proof: ${JSON.stringify(err)}`})
       .then(() => {
         election.recordVote(vote)
         ws.emit('votes', vote.toJson())
       })
+      .catch((err) => {throw `failed to verify snark proof: ${JSON.stringify(err)}`})
   })
   
   return {
